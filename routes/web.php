@@ -20,3 +20,5 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/profile', 'AccountController@profile')->name('profile');
 Route::patch('/profile', 'AccountController@updateProfile')->name('update-profile');
+Route::get('/change-password', 'AccountController@changePassword')->name('change-password');
+Route::patch('/change-password', 'AccountController@updatePassword')->name('update-password');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Hash;
 use Illuminate\Http\Request;
 
 class AccountController extends Controller
@@ -53,5 +54,33 @@ class AccountController extends Controller
             session()->flash('status-type', 'danger');
         }
         return redirect()->route('profile');
+    }
+
+    public function changePassword()
+    {
+        $user = \Auth::user();
+        return view('change-password', compact('user'));
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $user = \Auth::user();
+        $request->validate([
+            'old_password' => ['required', 'string', function ($attribute, $value, $fail) use ($user) {
+                if (! Hash::check($value, $user->password)) {
+                    $fail('Password is invalid');
+                }
+            }],
+            'new_password' => ['required', 'string', 'min:6', 'confirmed']
+        ]);
+        $user->password = Hash::make($request->new_password);
+        if ($user->save()) {
+            session()->flash('status', 'Password successfully changed.');
+            session()->flash('status-type', 'success');
+        } else {
+            session()->flash('status', 'Something was wrong, please try again later.');
+            session()->flash('status-type', 'danger');
+        }
+        return redirect()->route('change-password');
     }
 }
