@@ -56,6 +56,8 @@ return [
 
     'asset_url' => env('ASSET_URL', null),
 
+    'https' => env('HTTPS', false),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
