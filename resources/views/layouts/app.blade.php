@@ -49,13 +49,14 @@
                                 </li>
                             @endif
                         @else
-                            <img src="{{ asset('storage/images/' . Auth::user()->avatar) }}" style="display:inline-block;width:37px;height:37px;margin-right:10px" alt="">
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    <img src="{{ asset('storage/images/' . Auth::user()->avatar) }}" style="width:30px;height:30px;margin-right:10px" alt="">
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a href="{{ route('home') }}" class="dropdown-item{{ Route::is('home') ? ' active' : '' }}">Dashboard</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
