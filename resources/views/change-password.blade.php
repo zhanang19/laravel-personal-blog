@@ -15,7 +15,6 @@
                     @endif
 
                     {{ Form::model($user, ['route' => 'change-password', 'method' => 'patch']) }}
-
                         <div class="form-group">
                             {{ Form::label('old_password', 'Old Password') }}
                             {{ Form::password('old_password', ['class' => 'form-control']) }}
