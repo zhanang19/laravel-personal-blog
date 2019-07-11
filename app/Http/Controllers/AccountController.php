@@ -68,7 +68,7 @@ class AccountController extends Controller
         $request->validate([
             'old_password' => ['required', 'string', function ($attribute, $value, $fail) use ($user) {
                 if (! Hash::check($value, $user->password)) {
-                    $fail('Password is invalid');
+                    $fail('Password doesn\'t match to our record');
                 }
             }],
             'new_password' => ['required', 'string', 'min:6', 'confirmed']
