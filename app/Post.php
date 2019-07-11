@@ -19,15 +19,26 @@ class Post extends Model
     ];
 
     /**
-     * Return comments for the post
+     * Return comments for this post
      */
     public function comments()
     {
         return $this->hasMany(\App\Comment::class);
     }
 
+    /**
+     * Return category for this post
+     */
     public function category()
     {
         return $this->belongsTo(\App\Category::class);
+    }
+    
+    /**
+     * Return the post owner
+     */
+    public function user()
+    {
+        return $this->belongsTo(\App\User::class);
     }
 }
