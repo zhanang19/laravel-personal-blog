@@ -33,5 +33,10 @@
         <div class="row justify-content-center">
             @each('components.blog-card', $posts, 'data', 'components.blog-empty')
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                {!! $posts->links() !!}
+            </div>
+        </div>
     </div>
 @endsection
