@@ -26,7 +26,7 @@ class AccountController extends Controller
     public function updateProfile(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'numeric', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string'],
             'avatar' => ['file', 'image', 'mimes:png', 'size:1024'],
         ]);
