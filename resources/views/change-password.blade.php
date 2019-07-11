@@ -17,7 +17,7 @@
                     {{ Form::model($user, ['route' => 'change-password', 'method' => 'patch']) }}
                         <div class="form-group">
                             {{ Form::label('old_password', 'Old Password') }}
-                            {{ Form::password('old_password', ['class' => 'form-control']) }}
+                            {{ Form::password('old_password', ['class' => 'form-control', 'autofocus']) }}
                             @error('old_password')
                                 <span class="text-danger" role="alert">
                                     <strong>{{ $message }}</strong>
