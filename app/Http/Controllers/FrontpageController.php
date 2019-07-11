@@ -18,6 +18,7 @@ class FrontpageController extends Controller
     public function view($slug = '')
     {
         $post = Post::whereSlug($slug)->firstOrFail();
+        $post->increment('views');
         return view('post', compact('post'));
     }
 }
