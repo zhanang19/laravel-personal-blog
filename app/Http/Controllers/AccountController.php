@@ -73,6 +73,13 @@ class AccountController extends Controller
             }],
             'new_password' => ['required', 'string', 'min:6', 'confirmed']
         ]);
+        if ($request->old_password === $request->new_password) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors([
+                    'new_password' => 'New password can\'t be same with old password'
+                ]);
+        }
         $user->password = Hash::make($request->new_password);
         if ($user->save()) {
             session()->flash('status', 'Password successfully changed.');
