@@ -30,19 +30,22 @@ class AccountController extends Controller
             'address' => ['required', 'string'],
             'avatar' => ['file', 'image', 'mimes:png', 'size:1024'],
         ]);
-
-        $avatar = $request->avatar;
-        $newAvatarFile = time() . md5($avatar->getClientOriginalName()) . '.' . $avatar->extension();
-        $avatar->storeAs('public/images', $newAvatarFile);
-        $oldAvatarFile = $user->avatar;
-        if ($oldAvatarFile !== 'user.png') {
-            try {
-                unlink(storage_path('app/public/images/' . $oldAvatarFile));
-            } catch (\Exception $e) {
-                report($e);
+        $user = \Auth::user();
+        
+        if ($request->has('avatar')) {
+            $avatar = $request->avatar;
+            $newAvatarFile = time() . md5($avatar->getClientOriginalName()) . '.' . $avatar->extension();
+            $avatar->storeAs('public/images', $newAvatarFile);
+            $oldAvatarFile = $user->avatar;
+            if ($oldAvatarFile !== 'user.png') {
+                try {
+                    unlink(storage_path('app/public/images/' . $oldAvatarFile));
+                } catch (\Exception $e) {
+                    report($e);
+                }
             }
+            $user->avatar = $newAvatarFile;
         }
-        $user->avatar = $newAvatarFile;
         $user->name = $request->input('name');
         $user->address = $request->input('address');
 
