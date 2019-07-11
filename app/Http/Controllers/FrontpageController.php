@@ -10,7 +10,7 @@ class FrontpageController extends Controller
 {
     public function index()
     {
-        $posts = Post::limit(4)->get();
+        $posts = Post::paginate(3);
         $categories = Category::limit(5)->get();
         return view('welcome', compact('posts', 'categories'));
     }
