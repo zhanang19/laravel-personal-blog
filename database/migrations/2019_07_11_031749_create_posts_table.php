@@ -21,7 +21,7 @@ class CreatePostsTable extends Migration
             $table->string('title');
             $table->text('content');
             $table->string('photo')->default('post.png');
-            $table->bigInteger('views');
+            $table->bigInteger('views')->default(0);
             $table->timestamps();
 
             $table->foreign('category_id')->references('id')->on('categories');
