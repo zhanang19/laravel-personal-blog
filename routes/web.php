@@ -12,6 +12,7 @@
 */
 
 Route::get('/', 'FrontpageController@index')->name('homepage');
+Route::get('post/{slug}', 'FrontpageController@view');
 
 Auth::routes();
 

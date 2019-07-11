@@ -14,4 +14,10 @@ class FrontpageController extends Controller
         $categories = Category::limit(5)->get();
         return view('welcome', compact('posts', 'categories'));
     }
+
+    public function view($slug = '')
+    {
+        $post = Post::whereSlug($slug)->firstOrFail();
+        return view('post', compact('post'));
+    }
 }
