@@ -4,9 +4,12 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+                <h1 class="text-center my-4">{{ $post->title }}</h1>
+            </div>
+            <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <img src="{{ asset('storage/images/' . $post->photo) }}" alt="{{ $post->title }}">
+                        <img class="d-block mx-auto my-5" src="{{ asset('storage/images/' . $post->photo) }}" alt="{{ $post->title }}">
                         <p>{{ $post->content }}</p>
                     </div>
                 </div>
