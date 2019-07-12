@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Post;
 use App\Category;
 use Illuminate\Http\Request;
