@@ -11,7 +11,7 @@
                                 <h4>Post</h4>
                             </div>
                             <div class="col-md-6">
-                                <a href="{{ route('posts.create') }}" class="btn btn-primary float-right">Add New Post</a>
+                                <a href="{{ route('posts.create') }}" class="btn btn-primary float-right">Create Post</a>
                             </div>
                         </div>
                     </div>
