@@ -21,12 +21,10 @@ class PostController extends Controller
      */
     public function index()
     {
-        if (auth()->user()->is_admin) {
-            $posts = Post::withTrashed()->get();
-            return view('post.index', compact('posts'));
-        } else {
-            abort(403, 'Only admin can access this resource!');
-        }
+        $user = Auth::user();
+        abort_unless($user->is_admin, 403, 'Only admin can access this resource!');
+        $posts = Post::withTrashed()->whereUserId($user->id)->get();
+        return view('post.index', compact('posts'));
     }
 
     /**
@@ -36,12 +34,10 @@ class PostController extends Controller
      */
     public function create()
     {
-        if (auth()->user()->is_admin) {
-            $categories = Category::all()->pluck('name', 'id');
-            return view('post.create', compact('categories'));
-        } else {
-            abort(403, 'Only admin can access this resource!');
-        }
+        $user = Auth::user();
+        abort_unless($user->is_admin, 403, 'Only admin can access this resource!');
+        $categories = Category::all()->pluck('name', 'id');
+        return view('post.create', compact('categories'));
     }
 
     /**
@@ -52,6 +48,8 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        $user = Auth::user();
+        abort_unless($user->is_admin, 403, 'Only admin can access this resource!');
         $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'category_id' => ['required', 'numeric', Rule::in(Category::all()->pluck('id'))],
@@ -64,7 +62,7 @@ class PostController extends Controller
         $photo->storeAs('public/images', $photoName);
         
         $result = Post::create([
-            'user_id' => \Auth::id(),
+            'user_id' => $user->id,
             'title' => $request->title,
             'slug' => \Str::slug($request->title, '-'),
             'category_id' => $request->category_id,
@@ -88,17 +86,12 @@ class PostController extends Controller
      * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function edit($slug)
+    public function edit($slug = '')
     {
-        $user = \Auth::user();
-        if (! $user->is_admin) {
-            abort(403, 'Only admin can access this resource!');
-        }
-        
+        $user = Auth::user();
+        abort_unless($user->is_admin, 403, 'Only admin can access this resource!');
         $post = Post::whereSlug($slug)->firstOrFail();
-        if ($post->user_id !== \Auth::id()) {
-            abort(403, 'Sorry, you\'re unathorized to edit this resource');
-        }
+        abort_unless($post->user_id == $user->id, 403, 'Sorry, you\'re unathorized to edit this resource');
         
         $categories = Category::all()->pluck('name', 'id');
         return view('post.edit', compact('post', 'categories'));
@@ -111,17 +104,12 @@ class PostController extends Controller
      * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $slug)
+    public function update(Request $request, $slug = '')
     {
-        $user = \Auth::user();
-        if (! $user->is_admin) {
-            abort(403, 'Only admin can access this resource!');
-        }
-        
+        $user = Auth::user();
+        abort_unless($user->is_admin, 403, 'Only admin can access this resource!');
         $post = Post::whereSlug($slug)->firstOrFail();
-        if ($post->user_id !== \Auth::id()) {
-            abort(403, 'Sorry, you\'re unathorized to edit this resource');
-        }
+        abort_unless($post->user_id == $user->id, 403, 'Sorry, you\'re unathorized to update this resource');
 
         $request->validate([
             'title' => ['required', 'string', 'max:255'],
@@ -144,7 +132,6 @@ class PostController extends Controller
             }
             $post->photo = $newPhotoName;
         }
-        
         $post->title = $request->title;
         $post->content = $request->content;
         $post->category_id = $request->category_id;
@@ -165,9 +152,13 @@ class PostController extends Controller
      * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function destroy($slug)
+    public function destroy($slug = '')
     {
+        $user = Auth::user();
+        abort_unless($user->is_admin, 403, 'Only admin can access this resource!');
         $post = Post::whereSlug($slug)->firstOrFail();
+        abort_unless($post->user_id == $user->id, 403, 'Sorry, you\'re unathorized to delete this resource');
+
         if ($post->delete()) {
             session()->flash('status', 'Post succesfully deleted.');
             session()->flash('status-type', 'success');
@@ -178,9 +169,19 @@ class PostController extends Controller
         return redirect()->route('posts.index');
     }
 
-    public function restore($slug)
+    /**
+     * Restore the specified resource from storage
+     * 
+     * @param  string  $slug
+     * @return \Illuminate\Http\Response
+     */
+    public function restore($slug = '')
     {
+        $user = Auth::user();
+        abort_unless($user->is_admin, 403, 'Only admin can access this resource!');
         $post = Post::withTrashed()->whereSlug($slug)->firstOrFail();
+        abort_unless($post->user_id == $user->id, 403, 'Sorry, you\'re unathorized to restore this resource');
+
         if ($post->restore()) {
             session()->flash('status', 'Post succesfully restored.');
             session()->flash('status-type', 'success');
@@ -191,9 +192,19 @@ class PostController extends Controller
         return redirect()->route('posts.index');
     }
 
-    public function forceDelete($slug)
+    /**
+     * Force delete the specified resource from storage
+     * 
+     * @param  string  $slug
+     * @return \Illuminate\Http\Response
+     */
+    public function forceDelete($slug = '')
     {
+        $user = Auth::user();
+        abort_unless($user->is_admin, 403, 'Only admin can access this resource!');
         $post = Post::withTrashed()->whereSlug($slug)->firstOrFail();
+        abort_unless($post->user_id == $user->id, 403, 'Sorry, you\'re unathorized to delete this resource');
+
         foreach ($post->comments as $comment) {
             $comment->delete();
         }
