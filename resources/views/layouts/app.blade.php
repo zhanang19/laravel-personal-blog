@@ -75,6 +75,15 @@
                                     </form>
                                 </div>
                             </li>
+                            @if (Auth::user()->is_admin)
+                            <li class="nav-item dropdown">
+                                <a id="adminDropdown" class="nav-link dropdown-toggle" href="" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Admin <span class="caret"></span></a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="adminDropdown">
+                                    <a href="{{ route('posts.index') }}" class="dropdown-item{{ Route::is('posts.index') ? ' active' : '' }}">All Post</a>
+                                    <a href="{{ route('posts.create') }}" class="dropdown-item{{ Route::is('posts.create') ? ' active' : '' }}">Create Post</a>
+                                </div>
+                            </li>
+                            @endif
                         @endguest
                     </ul>
                 </div>
