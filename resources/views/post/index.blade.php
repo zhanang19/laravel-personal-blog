@@ -36,13 +36,11 @@
                                         <td>{{ $post->views }} views</td>
                                         <td>{{ count($post->comments) }} comments</td>
                                         <td>
-
                                             @if (is_null($post->deleted_at))
-                                            Active
+                                            <span class="badge badge-success">Active</span>
                                             @else
-                                            Deleted
+                                            <span class="badge badge-danger">Deleted</span>
                                             @endif
-
                                         </td>
                                         <td>
                                             @if (is_null($post->deleted_at))
