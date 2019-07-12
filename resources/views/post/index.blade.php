@@ -16,6 +16,7 @@
                         </div>
                     </div>
                     <div class="card-body">
+                        @include ('layouts.alert')
                         <table id="table-posts" class="table-striped" style="width:100%">
                             <thead>
                                 <tr>

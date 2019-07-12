@@ -45,18 +45,9 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        $request->validate([
+            ''
+        ]);
     }
 
     /**
@@ -85,11 +76,22 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
-        //
+        $post = Post::whereSlug($slug)->firstOrFail();
+        foreach ($post->comments as $comment) {
+            $comment->delete();
+        }
+        if ($post->delete()) {
+            session()->flash('status', 'Post succesfully deleted.');
+            session()->flash('status-type', 'success');
+        } else {
+            session()->flash('status', 'Something was wrong, please try again later.');
+            session()->flash('status-type', 'danger');
+        }
+        return redirect()->route('posts.index');
     }
 }
