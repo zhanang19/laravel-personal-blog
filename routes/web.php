@@ -26,3 +26,5 @@ Route::patch('/change-password', 'AccountController@updatePassword')->name('upda
 
 Route::resource('posts', 'PostController');
 Route::get('posts/delete/{slug}', 'PostController@destroy')->name('posts.delete');
+Route::get('posts/restore/{slug}', 'PostController@restore')->name('posts.restore');
+Route::get('posts/force-delete/{slug}', 'PostController@forceDelete')->name('posts.force-delete');

@@ -22,7 +22,7 @@ class PostController extends Controller
     public function index()
     {
         if (auth()->user()->is_admin) {
-            $posts = Post::all();
+            $posts = Post::withTrashed()->get();
             return view('post.index', compact('posts'));
         } else {
             abort(403, 'Only admin can access this resource!');
@@ -168,11 +168,37 @@ class PostController extends Controller
     public function destroy($slug)
     {
         $post = Post::whereSlug($slug)->firstOrFail();
+        if ($post->delete()) {
+            session()->flash('status', 'Post succesfully deleted.');
+            session()->flash('status-type', 'success');
+        } else {
+            session()->flash('status', 'Something was wrong, please try again later.');
+            session()->flash('status-type', 'danger');
+        }
+        return redirect()->route('posts.index');
+    }
+
+    public function restore($slug)
+    {
+        $post = Post::withTrashed()->whereSlug($slug)->firstOrFail();
+        if ($post->restore()) {
+            session()->flash('status', 'Post succesfully restored.');
+            session()->flash('status-type', 'success');
+        } else {
+            session()->flash('status', 'Something was wrong, please try again later.');
+            session()->flash('status-type', 'danger');
+        }
+        return redirect()->route('posts.index');
+    }
+
+    public function forceDelete($slug)
+    {
+        $post = Post::withTrashed()->whereSlug($slug)->firstOrFail();
         foreach ($post->comments as $comment) {
             $comment->delete();
         }
-        if ($post->delete()) {
-            session()->flash('status', 'Post succesfully deleted.');
+        if ($post->forceDelete()) {
+            session()->flash('status', 'Post succesfully deleted forever.');
             session()->flash('status-type', 'success');
         } else {
             session()->flash('status', 'Something was wrong, please try again later.');

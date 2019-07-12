@@ -24,20 +24,35 @@
                                     <th>Title</th>
                                     <th>Views Count</th>
                                     <th>Comments Count</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($posts as $item)
+                                @foreach ($posts as $post)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $item->title }}</td>
-                                        <td>{{ $item->views }} views</td>
-                                        <td>{{ count($item->comments) }} comments</td>
+                                        <td>{{ $post->title }}</td>
+                                        <td>{{ $post->views }} views</td>
+                                        <td>{{ count($post->comments) }} comments</td>
                                         <td>
-                                            <a href="{{ route('view-post', ['slug' => $item->slug]) }}" class="btn btn-sm btn-success">View</a>
-                                            <a href="{{ route('posts.edit', ['slug' => $item->slug]) }}" class="btn btn-sm btn-primary">Edit</a>
-                                            <a href="{{ route('posts.delete', ['slug' => $item->slug]) }}" class="btn btn-sm btn-danger">Delete</a>
+
+                                            @if (is_null($post->deleted_at))
+                                            Active
+                                            @else
+                                            Deleted
+                                            @endif
+
+                                        </td>
+                                        <td>
+                                            @if (is_null($post->deleted_at))
+                                            <a href="{{ route('view-post', ['slug' => $post->slug]) }}" class="btn btn-sm btn-success">View</a>
+                                            <a href="{{ route('posts.edit', ['slug' => $post->slug]) }}" class="btn btn-sm btn-primary">Edit</a>
+                                            <a href="{{ route('posts.delete', ['slug' => $post->slug]) }}" class="btn btn-sm btn-danger">Delete</a>
+                                            @else
+                                            <a href="{{ route('posts.restore', ['slug' => $post->slug]) }}" class="btn btn-sm btn-primary">Restore</a>
+                                            <a href="{{ route('posts.force-delete', ['slug' => $post->slug]) }}" class="btn btn-sm btn-danger">Force Delete</a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
