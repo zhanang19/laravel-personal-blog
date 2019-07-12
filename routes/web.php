@@ -14,6 +14,7 @@
 Route::get('/', 'FrontpageController@index')->name('homepage');
 Route::get('post/{slug}', 'FrontpageController@view')->name('view-post');
 Route::post('add-comment/{slug}', 'FrontpageController@addComment')->name('add-comment');
+Route::get('delete-comment/{comment_id}', 'FrontpageController@destroyComment')->name('delete-comment');
 
 Auth::routes();
 
