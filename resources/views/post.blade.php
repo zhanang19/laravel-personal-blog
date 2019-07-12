@@ -21,6 +21,8 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
+                        @include('layouts.alert')
+                        @include('components.insert-comment')
                         @each('components.comment-card', $post->comments, 'data', 'components.comment-empty')
                     </div>
                 </div>

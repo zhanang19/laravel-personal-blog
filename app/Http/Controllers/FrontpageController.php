@@ -21,4 +21,31 @@ class FrontpageController extends Controller
         $post->increment('views');
         return view('post', compact('post'));
     }
+
+    public function addComment(Request $request, $slug = '')
+    {
+        if (\Auth::check()) {
+            $user = \Auth::user();
+            $post = Post::whereSlug($slug)->firstOrFail();
+            $request->validate([
+                'comment' => ['required', 'string', 'min:10']
+            ]);
+
+            $result = Comment::create([
+                'content' => $request->comment,
+                'user_id' => $user->id,
+                'post_id' => $post->id,
+            ]);
+            if ($result) {
+                session()->flash('status', 'Post succesfully created.');
+                session()->flash('status-type', 'success');
+            } else {
+                session()->flash('status', 'Something was wrong, please try again later.');
+                session()->flash('status-type', 'danger');
+            }
+            return redirect()->route('view-post', ['slug' => $slug]);
+        } else {
+            abort(401, 'Sorry you must login first!');
+        }
+    }
 }

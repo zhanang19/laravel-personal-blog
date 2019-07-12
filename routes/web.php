@@ -13,6 +13,7 @@
 
 Route::get('/', 'FrontpageController@index')->name('homepage');
 Route::get('post/{slug}', 'FrontpageController@view')->name('view-post');
+Route::post('add-comment/{slug}', 'FrontpageController@addComment')->name('add-comment');
 
 Auth::routes();
 
