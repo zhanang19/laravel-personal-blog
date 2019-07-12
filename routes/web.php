@@ -12,7 +12,7 @@
 */
 
 Route::get('/', 'FrontpageController@index')->name('homepage');
-Route::get('post/{slug}', 'FrontpageController@view');
+Route::get('post/{slug}', 'FrontpageController@view')->name('view-post');
 
 Auth::routes();
 
@@ -21,3 +21,6 @@ Route::get('/profile', 'AccountController@profile')->name('profile');
 Route::patch('/profile', 'AccountController@updateProfile')->name('update-profile');
 Route::get('/change-password', 'AccountController@changePassword')->name('change-password');
 Route::patch('/change-password', 'AccountController@updatePassword')->name('update-password');
+
+Route::resource('posts', 'PostController');
+Route::get('posts/delete/{slug}', 'PostController@destroy')->name('posts.delete');
