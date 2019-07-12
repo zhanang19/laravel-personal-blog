@@ -90,13 +90,18 @@ class PostController extends Controller
      */
     public function edit($slug)
     {
-        if (auth()->user()->is_admin) {
-            $post = Post::whereSlug($slug)->firstOrFail();
-            $categories = Category::all()->pluck('name', 'id');
-            return view('post.edit', compact('post', 'categories'));
-        } else {
+        $user = \Auth::user();
+        if (! $user->is_admin) {
             abort(403, 'Only admin can access this resource!');
         }
+        
+        $post = Post::whereSlug($slug)->firstOrFail();
+        if ($post->user_id !== \Auth::id()) {
+            abort(403, 'Sorry, you\'re unathorized to edit this resource');
+        }
+        
+        $categories = Category::all()->pluck('name', 'id');
+        return view('post.edit', compact('post', 'categories'));
     }
 
     /**
