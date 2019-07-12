@@ -8,12 +8,7 @@
                 <div class="card-header">Change Password</div>
                 
                 <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-{{ session('status-type') }}" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
+                    @include ('layouts.alert')
                     {{ Form::model($user, ['route' => 'change-password', 'method' => 'patch']) }}
                         <div class="form-group">
                             {{ Form::label('old_password', 'Old Password') }}

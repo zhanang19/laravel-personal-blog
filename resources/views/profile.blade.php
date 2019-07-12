@@ -8,11 +8,7 @@
                 <div class="card-header">Profile</div>
                 
                 <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-{{ session('status-type') }}" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+                    @include ('layouts.alert')
 
                     {{ Form::model($user, ['route' => 'update-profile', 'enctype' => 'multipart/form-data', 'method' => 'patch']) }}
                         <img src="{{ asset('storage/images/' . $user->avatar) }}" class="p-3" style="width:150px;height:150px;" alt="">
