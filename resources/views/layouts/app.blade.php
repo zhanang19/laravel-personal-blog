@@ -81,6 +81,7 @@
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="adminDropdown">
                                     <a href="{{ route('posts.index') }}" class="dropdown-item{{ Route::is('posts.index') ? ' active' : '' }}">All Post</a>
                                     <a href="{{ route('posts.create') }}" class="dropdown-item{{ Route::is('posts.create') ? ' active' : '' }}">Create Post</a>
+                                    <a href="{{ route('categories.create') }}" class="dropdown-item{{ Route::is('categories.create') ? ' active' : '' }}">Create Category</a>
                                 </div>
                             </li>
                             @endif
