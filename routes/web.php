@@ -19,13 +19,18 @@ Route::get('delete-comment/{comment_id}', 'FrontpageController@destroyComment')-
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/profile', 'AccountController@profile')->name('profile');
-Route::patch('/profile', 'AccountController@updateProfile')->name('update-profile');
-Route::get('/change-password', 'AccountController@changePassword')->name('change-password');
-Route::patch('/change-password', 'AccountController@updatePassword')->name('update-password');
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/profile', 'AccountController@profile')->name('profile');
+    Route::patch('/profile', 'AccountController@updateProfile')->name('update-profile');
+    Route::get('/change-password', 'AccountController@changePassword')->name('change-password');
+    Route::patch('/change-password', 'AccountController@updatePassword')->name('update-password');
+    
+    Route::resource('posts', 'PostController');
+    Route::group(['prefix' => 'posts', 'as' => 'posts'], function () {
+        Route::get('delete/{slug}', 'PostController@destroy')->name('delete');
+        Route::get('restore/{slug}', 'PostController@restore')->name('restore');
+        Route::get('force-delete/{slug}', 'PostController@forceDelete')->name('force-delete');
+    });
 
-Route::resource('posts', 'PostController');
-Route::get('posts/delete/{slug}', 'PostController@destroy')->name('posts.delete');
-Route::get('posts/restore/{slug}', 'PostController@restore')->name('posts.restore');
-Route::get('posts/force-delete/{slug}', 'PostController@forceDelete')->name('posts.force-delete');
+});
