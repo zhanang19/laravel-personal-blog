@@ -18,9 +18,9 @@
                                 </form>
                             </div>
                             <div class="col-md-6 my-2">
-                                <form action="" method="get"></form>
+                                <form action="{{ route('search') }}" method="get">
                                     <div class="btn-group" role="group" aria-label="Search">
-                                        <input name="search" type="text" class="form-control" placeholder="Type a keyword...">
+                                        <input name="keyword" type="text" class="form-control" placeholder="Type a keyword...">
                                         <button type="submit" class="btn btn-primary">Search</button>
                                     </div>
                                 </form>

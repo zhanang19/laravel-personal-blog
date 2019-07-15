@@ -64,4 +64,14 @@ class FrontpageController extends Controller
         }
         return redirect()->route('view-post', ['slug' => $slug]);
     }
+
+    public function search(Request $request)
+    {
+        $keyword = $request->query('keyword');
+        $posts = Post::where('title', 'like', "%{$keyword}%")
+            ->orWhere('content', 'like', "%{$keyword}%")
+            ->paginate(3);
+        $posts->appends($request->only(['keyword']));
+        return view('search', compact('posts', 'keyword'));
+    }
 }
