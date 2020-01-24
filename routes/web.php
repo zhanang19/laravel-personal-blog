@@ -26,7 +26,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/change-password', 'AccountController@changePassword')->name('change-password');
     Route::patch('/change-password', 'AccountController@updatePassword')->name('update-password');
     
-    Route::resource('posts', 'PostController');
+    Route::resource('posts', 'PostController')->except(['destroy']);
     Route::group(['prefix' => 'posts', 'as' => 'posts.'], function () {
         Route::get('delete/{slug}', 'PostController@destroy')->name('delete');
         Route::get('restore/{slug}', 'PostController@restore')->name('restore');
