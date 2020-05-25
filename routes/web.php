@@ -11,6 +11,10 @@
 |
 */
 
+Route::get('/coba', function () {
+    return view('auth.login-new');
+});
+
 Route::get('/', 'FrontpageController@index')->name('homepage');
 Route::get('post/{slug}', 'FrontpageController@view')->name('view-post');
 Route::get('search', 'FrontpageController@search')->name('search');
